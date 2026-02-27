@@ -38,6 +38,11 @@ int main()
     DigitalOut led1(PB_9);
 
     // --- adding variables and objects and applying functions starts here ---
+    
+    // ir distance sensor
+    float ir_distance_mV = 0.0f;    // define a variable to store measurement (in mV)
+    AnalogIn ir_analog_in(PC_2);    // create AnalogIn object to read in the infrared distance sensor
+                                    // 0...3.3V are mapped to 0...1
 
     // start timer
     main_task_timer.start();
@@ -48,9 +53,15 @@ int main()
 
         // --- code that runs every cycle at the start goes here ---
 
+        // print to the serial terminal
+        printf("IR distance mV: %f \n", ir_distance_mV);
+
         if (do_execute_main_task) {
 
             // --- code that runs when the blue button was pressed goes here ---
+            
+            // read analog input
+            ir_distance_mV = 1.0e3f * ir_analog_in.read() * 3.3f;
 
             // visual feedback that the main task is executed, setting this once would actually be enough
             led1 = 1;
@@ -63,6 +74,7 @@ int main()
 
                 // reset variables and objects
                 led1 = 0;
+                ir_distance_mV = 0.0f;
             }
         }
 
